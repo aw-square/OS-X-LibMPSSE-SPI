@@ -263,9 +263,9 @@ FTDI_API void Init_libMPSSE(void)
 /* Load D2XX dynamic library */
 #ifdef __linux
 	hdll_d2xx = dlopen("libftd2xx.so",RTLD_LAZY);
-	CHECK_NULL(hdll_d2xx);
+	CHECK_NULL(hdll_d2xx); 
 #elif __MACH__
-	hdll_d2xx = dlopen("/Users/aw/Downloads/release/build/libftd2xx.1.4.24.dylib", RTLD_LAZY);
+	hdll_d2xx = dlopen("/Users/aw/Downloads/D2XX1.4.24 - Mac Intel/release/build/libftd2xx.1.4.24.dylib", RTLD_LAZY);
 	CHECK_NULL(hdll_d2xx);
 #else
 	hdll_d2xx = LoadLibraryA("ftd2xx.dll");
