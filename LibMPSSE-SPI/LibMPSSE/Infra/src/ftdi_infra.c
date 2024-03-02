@@ -75,8 +75,6 @@
 	void *hdll_d2xx;
 #endif
 
-InfraFunctionPtrLst varFunctionPtrLst;
-
 
 /******************************************************************************/
 /*								Local function declarations					  */
@@ -260,67 +258,6 @@ FTDI_API void Init_libMPSSE(void)
 	//FT_STATUS status;
 	FN_ENTER;
 
-/* Load D2XX dynamic library */
-#ifdef __linux
-	hdll_d2xx = dlopen("libftd2xx.so",RTLD_LAZY);
-	CHECK_NULL(hdll_d2xx); 
-#elif __MACH__
-	hdll_d2xx = dlopen("/Users/aw/Downloads/D2XX1.4.24 - Mac Intel/release/build/libftd2xx.1.4.24.dylib", RTLD_LAZY);
-	CHECK_NULL(hdll_d2xx);
-#else
-	hdll_d2xx = LoadLibraryA("ftd2xx.dll");
-	CHECK_NULL(hdll_d2xx);
-#endif
-
-	varFunctionPtrLst.p_FT_GetLibraryVersion = (pfunc_FT_GetLibraryVersion)GET_FUNC(hdll_d2xx, "FT_GetLibraryVersion");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_GetLibraryVersion);
-	/*FunctionPointer for FT_CreateDeviceInfoList*/
-	varFunctionPtrLst.p_FT_GetNumChannel = (pfunc_FT_GetNumChannel)GET_FUNC(hdll_d2xx,"FT_CreateDeviceInfoList");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_GetNumChannel);
-	/*function Pointer for FT_GetDeviceInfoList */
-	varFunctionPtrLst.p_FT_GetDeviceInfoList = \
-		(pfunc_FT_GetDeviceInfoList)GET_FUNC(hdll_d2xx,"FT_GetDeviceInfoList");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_GetDeviceInfoList);
-	/*open*/
-	varFunctionPtrLst.p_FT_Open = (pfunc_FT_Open)GET_FUNC(hdll_d2xx,"FT_Open");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_Open);
-	/*close*/
-	varFunctionPtrLst.p_FT_Close = (pfunc_FT_Close)GET_FUNC(hdll_d2xx,"FT_Close");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_Close);
-	/*Reset*/
-	varFunctionPtrLst.p_FT_ResetDevice = (pfunc_FT_ResetDevice)GET_FUNC(hdll_d2xx, "FT_ResetDevice");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_ResetDevice);
-	/*Purge*/
-	varFunctionPtrLst.p_FT_Purge = (pfunc_FT_Purge)GET_FUNC(hdll_d2xx,"FT_Purge");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_Purge);
-	/*SetUSBParameters*/
-	varFunctionPtrLst.p_FT_SetUSBParameters = (pfunc_FT_SetUSBParameters)GET_FUNC(hdll_d2xx,"FT_SetUSBParameters");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_SetUSBParameters);
-	/*SetChars*/
-	varFunctionPtrLst.p_FT_SetChars = (pfunc_FT_SetChars)GET_FUNC(hdll_d2xx,"FT_SetChars");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_SetChars);
-	/*SetTimeouts*/
-	varFunctionPtrLst.p_FT_SetTimeouts = (pfunc_FT_SetTimeouts)GET_FUNC(hdll_d2xx,"FT_SetTimeouts");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_SetTimeouts);
-	/*SetLatencyTimer*/
-    varFunctionPtrLst.p_FT_SetLatencyTimer = (pfunc_FT_SetLatencyTimer)GET_FUNC(hdll_d2xx,"FT_SetLatencyTimer");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_SetLatencyTimer);
-	/*SetBitmode*/
-	varFunctionPtrLst.p_FT_SetBitmode = (pfunc_FT_SetBitmode)GET_FUNC(hdll_d2xx,"FT_SetBitMode");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_SetBitmode);
-	/*FT_GetQueueStatus*/
-	varFunctionPtrLst.p_FT_GetQueueStatus = (pfunc_FT_GetQueueStatus)GET_FUNC(hdll_d2xx,"FT_GetQueueStatus");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_GetQueueStatus);
-	/*FT_Read*/
-	varFunctionPtrLst.p_FT_Read = (pfunc_FT_Read)GET_FUNC(hdll_d2xx,"FT_Read");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_Read);
-	/*FT_Write*/
-	varFunctionPtrLst.p_FT_Write = (pfunc_FT_Write)GET_FUNC(hdll_d2xx,"FT_Write");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_Write);
-	/*FT_GetDeviceInfo*/
-	varFunctionPtrLst.p_FT_GetDeviceInfo = (pfunc_FT_GetDeviceInfo)GET_FUNC(hdll_d2xx,"FT_GetDeviceInfo");
-	CHECK_SYMBOL(varFunctionPtrLst.p_FT_GetDeviceInfo);
-
 	/*Call module specific initialization functions from here(if at all they are required)
 		Example:
 			Top_Init();	//This may be a function in ftdi_common.c
@@ -497,8 +434,8 @@ FTDI_API FT_STATUS CAL_CONV Infra_TestFunction(unsigned long i, unsigned long *j
 	FT_STATUS status=FT_OK;
 	FN_ENTER;
 	*j = i+100;
-	//CHECK_NULL_RET(varFunctionPtrLst.p_FT_GetLibraryVersion);
-	//varFunctionPtrLst.p_FT_GetLibraryVersion(j);
+	//CHECK_NULL_RET(FT_GetLibraryVersion);
+	//FT_GetLibraryVersion(j);
 
 	FN_EXIT;
 	return status;
